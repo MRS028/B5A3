@@ -68,4 +68,4 @@ BookSchema.statics.updateAvailability = async function (
   return book;
 };  
 
-export const Book = mongoose.model<IBook>("Book", BookSchema);
+export default mongoose.model<IBook, IBookModel>("Book", BookSchema);
