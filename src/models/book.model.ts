@@ -30,11 +30,12 @@ export interface IBookModel extends Model<IBook> {
 }
 
 const BookSchema = new Schema({
-  title: { type: String, required: true },
-  author: { type: String, required: true },
+  title: { type: String, required: [true, "Title is required"] },
+  author: { type: String, required: [true, "Author name is required"] },
   genre: {
     type: String,
-    required: true,
+    required: [true, "Genre is required"],
+    message: "One genere should be at least.",
     enum: [
       "FRICTION",
       "SCIENCE",
@@ -47,11 +48,26 @@ const BookSchema = new Schema({
       "RELIGION",
     ],
   },
-  isbn: { type: String, required: true, unique: true },
-  description: { type: String, required: false },
-  copies: { type: Number, required: true, min: 0 },
+  isbn: { type: String, required: [true, "ISBN is required"], unique: true },
+  description: { type: String},
+  copies: {
+    type: Number,
+    required: true,
+    min: [0, "Copies should be a positive number"],
+  },
   available: { type: Boolean, default: true },
+}, {
+  timestamps: true,
 });
+
+
+
+BookSchema.pre("save", async function (next) {
+    if(this.isModified("copies")){
+        this.available = this.copies > 0;
+    }
+    next();
+})
 
 BookSchema.statics.updateAvailability = async function (
   bookId: mongoose.Types.ObjectId,
@@ -65,6 +81,6 @@ BookSchema.statics.updateAvailability = async function (
   book.available = book.copies > 0;
   await book.save();
   return book;
-};  
+};
 
 export default mongoose.model<IBook, IBookModel>("Book", BookSchema);
