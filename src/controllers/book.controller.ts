@@ -34,8 +34,7 @@ export const getAllBooks = async (req: Request, res: Response) => {
       query.genre = filter;
     }
     if (sortBy) {
-      sortOptions[sortBy as string] = sort === 'desc' ? -1 : 1; // 'desc' ঠিক করে দিলাম
-    } else {
+      sortOptions[sortBy as string] = sort === 'desc' ? -1 : 1; 
       sortOptions.createdAt = -1;
     }
 

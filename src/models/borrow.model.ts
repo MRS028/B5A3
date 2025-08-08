@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-import Book, { IBook, IBookModel } from "./book.model";
+import Book, { IBookModel } from "./book.model";
 
 export interface IBorrow extends Document {
   book: mongoose.Types.ObjectId;
@@ -19,7 +19,7 @@ const BorrowSchema = new Schema(
 );
 
 BorrowSchema.pre("save", async function (next) {
-  const borrow = this as any;
+  const borrow = this as IBorrow & mongoose.Document;
   if (borrow.isNew || borrow.isModified("quantity")) {
     const book = await (Book as IBookModel).findById(borrow.book).exec();
     if (!book) {

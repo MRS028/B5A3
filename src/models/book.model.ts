@@ -1,21 +1,20 @@
-import { Mode } from "fs";
 import mongoose, { Schema, Document, Model } from "mongoose";
-import { title } from "process";
 
 export interface IBook extends Document {
   title: string;
   author: string;
   genre:
-    | "Friction"
-    | "Science"
-    | "Non-Fiction"
-    | "Self-Help"
-    | "Biography"
-    | "Poetry"
-    | "History"
-    | "Drama"
-    | "Philosophy"
-    | "Religion";
+    | "FRICTION"
+    | "THRILLER"
+    | "FANTASY"
+    | "SCIENCE"
+    | "NON_FRICTION"
+    | "BIOGRAPHY"
+    | "POETRY"
+    | "HISTORY"
+    | "DRAMA"
+    | "PHILOSOPY"
+    | "RELIGION";
   isbn: string;
   description?: string;
   copies: number;
@@ -53,7 +52,7 @@ const BookSchema = new Schema({
   copies: {
     type: Number,
     required: true,
-    min: [0, "Copies should be a positive number"],
+    min: [0, "Copies should be a positive number and greater then the having coppies"],
   },
   available: { type: Boolean, default: true },
 }, {
